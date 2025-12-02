@@ -1,9 +1,9 @@
-
 import pandas as pd
 import os
 from transformers import GPT2Tokenizer
 
 # 1. Setup Paths
+# This ensures it finds the data folder no matter where you run it from
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "../data")
 
@@ -20,7 +20,7 @@ def find_file(keywords):
     all_files = os.listdir(DATA_DIR)
     
     for file in all_files:
-        # Check if any keyword matches the filename
+        # Check if any keyword matches the filename (case-insensitive)
         for key in keywords:
             if key.lower() in file.lower():
                 # Accept CSV or TXT files

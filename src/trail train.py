@@ -26,11 +26,13 @@ def train_model(mode):
     print(f"📚 Loaded {len(texts)} examples. Preparing to train...")
 
     # Save texts to a temporary file for the TextDataset loader
+    # (TextDataset requires a file path, not a list of strings)
     temp_file = os.path.join(BASE_DIR, f"temp_{mode}.txt")
     with open(temp_file, "w", encoding="utf-8") as f:
         f.write("\n".join(texts))
 
     # 2. Prepare Dataset
+    # Block size is the max length of a sequence. 128 is good for speed/memory.
     train_dataset = TextDataset(
         tokenizer=tokenizer,
         file_path=temp_file,
@@ -42,6 +44,7 @@ def train_model(mode):
     )
 
     # 3. Initialize Model
+    # We use DistilGPT2 because it is small and fast for laptops
     model = GPT2LMHeadModel.from_pretrained('distilgpt2')
 
     # 4. Training Arguments
@@ -77,7 +80,7 @@ def train_model(mode):
     # Cleanup temp file
     if os.path.exists(temp_file):
         os.remove(temp_file)
-        
+    
     print(f"✅ {mode.upper()} Model successfully saved!")
 
 if __name__ == "__main__":
@@ -85,11 +88,8 @@ if __name__ == "__main__":
     if not os.path.exists(MODEL_DIR):
         os.makedirs(MODEL_DIR)
 
-    # 1. Train Roast Model (Jokes/Sarcasm)
+    # Train Roast Model (Sarcasm/Humor)
     train_model("roast")
     
-    # 2. Train Relationship Model (Flirting/Pickup Lines) <-- NEW!
-    train_model("relationship")
-    
-    # 3. Train Therapy Model (Optional)
+    # Train Therapy Model (Mental Health) - Optional if you have the data
     train_model("therapy")
