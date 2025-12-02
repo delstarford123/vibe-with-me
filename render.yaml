@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: laugh-out-ai
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+
+### 3. Essential Code Adjustment (CPU Only)
+Cloud servers usually don't have GPUs on the free tier. We must force your `src/predict.py` to use the CPU, or it might crash trying to find CUDA.
+
+**Update `src/predict.py` line 13:**
+```python
+# Force CPU for cloud hosting to avoid memory errors
+self.device = "cpu" 
+# self.device = "cuda" if torch.cuda.is_available() else "cpu" <--- Comment this out for Render Free Tier
+```
+
+### 4. Push to GitHub
+Render pulls code from GitHub. You need to push your project there.
+
+1.  Create a **New Repository** on GitHub (e.g., `laugh-out-ai`).
+2.  Open your terminal in the project folder and run:
+    ```bash
+    git init
+    git add .
+    git commit -m "Ready for deployment"
+    git branch -M main
+    git remote add origin https://github.com/YOUR_USERNAME/laugh-out-ai.git
+    git push -u origin main
