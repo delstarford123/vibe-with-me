@@ -12,7 +12,7 @@ bot = None
 MODEL_LOADED = False
 
 print("\n=======================================")
-print("🚀 STARTING LAUGH OUT AI SERVER")
+print("🚀 STARTING VIBE AI SERVER")
 print("=======================================")
 
 try:
@@ -31,25 +31,33 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
+    
+    # Extract User Data
     user_text = data.get('text', '')
     mode = data.get('mode', 'roast')
+    user_data = data.get('userData', {}) # {name: "John", gender: "male", age: 22}
     
     response_text = ""
 
     if MODEL_LOADED and bot:
         try:
-            response_text = bot.generate(user_text, mode)
+            # Pass user_data to the generator
+            response_text = bot.generate(user_text, mode, user_data)
         except Exception as e:
-            response_text = f"Error: {str(e)}"
-    else: 
-        if mode == 'roast':
-            response_text = "I'd roast you, but my files are missing. (Mock Mode)"
+            print(f"Generation Error: {e}")
+            response_text = "I'm blushing... I forgot what to say."
+    else:
+        # Mock Responses for testing without models
+        name = user_data.get('name', 'babe')
+        if mode == 'relationship':
+            response_text = f"I love you so much {name}! You are my favorite person."
+        elif mode == 'roast':
+            response_text = f"Nice try {name}, but I'm not in the mood."
         else:
-            response_text = "I am listening. (Mock Mode)"
+            response_text = f"I'm listening, {name}."
 
     return jsonify({'response': response_text})
 
 if __name__ == '__main__':
     print(f"🌐 Server running at: http://127.0.0.1:5000")
     app.run(debug=True, port=5000)
-    
