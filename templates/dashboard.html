@@ -2,22 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vibe With Me AI</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         /* --- MODERN VARIABLES --- */
         :root {
+            --font-main: 'Outfit', sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.2);
+            --shadow-sm: 0 5px 15px rgba(0,0,0,0.05);
+            
+            /* Theme Colors */
             --primary-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --roast-grad: linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%);
-            --love-grad: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            --smart-grad: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-            --chat-bg: #f4f7f6;
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --chat-bg: #f8f9fa;
+            
+            /* Accent Colors (Dynamic) */
+            --accent-color: #333; 
         }
 
-        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
@@ -26,258 +35,350 @@
             justify-content: center;
             align-items: center;
             font-family: var(--font-main);
-            background: #222;
+            background: #111;
             overflow: hidden;
+            transition: background 0.8s ease;
         }
 
-        /* --- DYNAMIC BACKGROUNDS --- */
-        body.roast { background: linear-gradient(45deg, #23074d, #cc5333); }
-        body.therapy { background: linear-gradient(45deg, #134e5e, #71b280); }
-        body.friend { background: linear-gradient(45deg, #42275a, #734b6d); }
-        body.relationship { background: linear-gradient(45deg, #ff9a9e, #fad0c4); }
-        body.smart { background: linear-gradient(45deg, #8EC5FC, #E0C3FC); }
+        /* --- DYNAMIC THEME BACKGROUNDS --- */
+        body.roast { background: linear-gradient(45deg, #4b134f, #c94b4b); }
+        body.therapy { background: linear-gradient(45deg, #11998e, #38ef7d); }
+        body.friend { background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045); }
+        body.relationship { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); }
+        body.smart { background: linear-gradient(45deg, #a18cd1, #fbc2eb); }
 
         /* --- MAIN APP CONTAINER --- */
         .app-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 450px;
             height: 90vh;
-            max-height: 800px;
+            max-height: 850px;
             background: var(--glass-bg);
-            border-radius: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 35px;
+            box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: scaleIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        /* --- ONBOARDING OVERLAY --- */
+        /* Responsive Mobile: Full Screen */
+        @media (max-width: 600px) {
+            .app-container {
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                max-height: none;
+                border-radius: 0;
+                border: none;
+            }
+        }
+
+        @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- ONBOARDING SCREEN --- */
         #onboarding {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            z-index: 100;
+            background: rgba(255,255,255,0.98);
+            z-index: 200;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 40px;
             text-align: center;
+            transition: opacity 0.5s;
         }
 
-        #onboarding h1 { font-size: 2rem; color: #333; margin-bottom: 10px; }
-        .form-group { width: 100%; margin-bottom: 15px; text-align: left; }
-        .form-group label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 12px;
-            border: 2px solid #eee; border-radius: 12px;
-            font-size: 1rem; background: #fafafa;
+        #onboarding h1 { font-size: 2.5rem; color: #222; margin-bottom: 5px; }
+        #onboarding p { color: #666; margin-bottom: 40px; font-weight: 300; }
+
+        .input-group { width: 100%; margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 0.85rem; font-weight: 600; color: #444; margin-left: 10px; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .styled-input {
+            width: 100%; padding: 15px 20px;
+            border: 2px solid #eee; border-radius: 20px;
+            font-size: 1.1rem; background: #f9f9f9;
+            font-family: var(--font-main); transition: 0.3s;
         }
+        .styled-input:focus { border-color: #764ba2; background: #fff; outline: none; box-shadow: 0 5px 15px rgba(118, 75, 162, 0.1); }
+
         .btn-primary {
-            width: 100%; padding: 15px;
-            background: var(--primary-grad);
-            color: white; border: none; border-radius: 12px;
-            font-size: 1.1rem; font-weight: bold;
-            cursor: pointer; margin-top: 20px;
+            width: 100%; padding: 18px;
+            background: #222; color: white;
+            border: none; border-radius: 20px;
+            font-size: 1.1rem; font-weight: 600; letter-spacing: 0.5px;
+            cursor: pointer; margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+        .btn-primary:active { transform: scale(0.98); }
 
         /* --- HEADER --- */
         .header {
-            padding: 20px;
+            padding: 20px 20px 10px;
             text-align: center;
-            background: rgba(255,255,255,0.8);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
         }
 
-        .avatar-wrapper {
-            position: relative;
-            width: 100px; height: 100px;
-            margin: 0 auto 10px;
-        }
-
+        .avatar-area { position: relative; width: 90px; height: 90px; margin: 0 auto 10px; }
+        
         .avatar {
             width: 100%; height: 100%;
             border-radius: 50%;
-            background: white;
+            background: #fff;
             display: flex; justify-content: center; align-items: center;
-            font-size: 50px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 3px solid transparent;
+            font-size: 45px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 4px solid white;
             cursor: pointer;
+            transition: transform 0.3s;
         }
+        .avatar:active { transform: scale(0.95); }
 
-        .status-badge {
-            position: absolute; bottom: 5px; right: 5px;
-            background: #2ecc71; color: white;
-            font-size: 0.7rem; padding: 4px 8px;
-            border-radius: 10px; font-weight: bold;
+        .voice-badge {
+            position: absolute; bottom: 0; right: 0;
+            background: #222; color: white;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 0.7rem; border: 2px solid white;
         }
+        .voice-badge.muted { background: #e74c3c; }
 
-        /* Animations */
-        @keyframes heartbeat { 0% {transform:scale(1);} 15% {transform:scale(1.15);} 30% {transform:scale(1);} 45% {transform:scale(1.15);} 60% {transform:scale(1);} }
-        @keyframes angryShake { 0% {transform:translate(0);} 20% {transform:translate(-3px, 3px);} 40% {transform:translate(-3px, -3px);} 60% {transform:translate(3px, 3px);} 80% {transform:translate(3px, -3px);} 100% {transform:translate(0);} }
-        @keyframes spin { 0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);} }
+        /* Dynamic Animations */
+        @keyframes pulse-love { 0% {box-shadow: 0 0 0 0 rgba(255, 117, 140, 0.4);} 70% {box-shadow: 0 0 0 15px rgba(255, 117, 140, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 117, 140, 0);} }
+        .relationship .avatar { animation: pulse-love 2s infinite; border-color: #ff758c; }
+        .roast .avatar { border-color: #cb2d3e; }
+        .smart .avatar { border-color: #a18cd1; }
 
-        .relationship .avatar { border-color: #ff758c; animation: heartbeat 2s infinite; }
-        .roast .avatar { border-color: #ef473a; animation: angryShake 0.5s infinite paused; }
-        .smart .avatar { border-color: #E0C3FC; animation: spin 10s linear infinite; }
+        .persona-name { font-size: 1.5rem; font-weight: 800; color: #2d3436; margin: 0; }
+        .persona-sub { font-size: 0.9rem; color: #636e72; font-weight: 400; margin-top: 2px; }
 
-        .persona-name { font-size: 1.4rem; font-weight: 800; color: #333; margin: 0; }
-        .persona-role { font-size: 0.9rem; color: #888; margin: 5px 0 0; }
-
-        /* --- MODE SWITCHER --- */
-        .mode-scroll {
-            display: flex; gap: 10px;
-            overflow-x: auto; padding: 10px 5px;
-            scrollbar-width: none;
+        /* --- MODE SCROLLER --- */
+        .mode-container {
+            margin-top: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+            -ms-overflow-style: none;  /* IE */
+            scrollbar-width: none;  /* Firefox */
         }
-        .mode-btn {
-            padding: 8px 16px; border-radius: 20px;
-            border: 1px solid #eee; background: white;
-            color: #666; font-size: 0.85rem; font-weight: bold;
-            cursor: pointer; white-space: nowrap;
-            flex-shrink: 0;
+        .mode-container::-webkit-scrollbar { display: none; }
+
+        .mode-pill {
+            display: inline-block;
+            padding: 8px 18px;
+            margin-right: 8px;
+            border-radius: 20px;
+            background: white;
+            color: #636e72;
+            font-size: 0.85rem; font-weight: 600;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .mode-btn.active { background: #333; color: white; border-color: #333; transform: scale(1.05); }
         
-        .relationship .mode-btn.active { background: #ff758c; border-color: #ff758c; }
-        .smart .mode-btn.active { background: #764ba2; border-color: #764ba2; }
+        .mode-pill.active {
+            background: #2d3436; color: white; border-color: #2d3436;
+            transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Dynamic Mode Colors */
+        .relationship .mode-pill.active { background: #ff758c; border-color: #ff758c; box-shadow: 0 4px 12px rgba(255, 117, 140, 0.4); }
+        .roast .mode-pill.active { background: #cb2d3e; border-color: #cb2d3e; box-shadow: 0 4px 12px rgba(203, 45, 62, 0.4); }
+        .smart .mode-pill.active { background: #9b59b6; border-color: #9b59b6; box-shadow: 0 4px 12px rgba(155, 89, 182, 0.4); }
 
         /* --- CHAT AREA --- */
         .chat-area {
-            flex: 1; padding: 20px;
-            background: var(--chat-bg);
+            flex: 1;
+            padding: 20px;
             overflow-y: auto;
             display: flex; flex-direction: column; gap: 15px;
+            background: #f8f9fa;
+            scroll-behavior: smooth;
         }
 
         .msg {
-            max-width: 80%; padding: 12px 16px;
-            border-radius: 18px; font-size: 0.95rem; line-height: 1.5;
-            position: relative; animation: slideUp 0.3s ease-out;
+            max-width: 85%;
+            padding: 12px 18px;
+            font-size: 0.95rem; line-height: 1.5;
+            position: relative;
+            animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .msg-user {
             align-self: flex-end;
-            background: #333; color: white;
-            border-bottom-right-radius: 4px;
+            background: #2d3436; color: white;
+            border-radius: 20px 20px 4px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .msg-bot {
             align-self: flex-start;
-            background: white; color: #333;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .msg img { max-width: 100%; border-radius: 10px; margin-top: 5px; }
-
-        .typing {
-            align-self: flex-start; color: #aaa; font-size: 0.8rem; 
-            margin-left: 10px; display: none; font-style: italic;
-        }
-
-        /* --- INPUT AREA --- */
-        .input-bar {
-            padding: 15px; background: white;
-            display: flex; gap: 10px; align-items: center;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .input-bar input {
-            flex: 1; padding: 14px 20px;
-            border-radius: 30px; border: 2px solid #f0f0f0;
-            font-size: 1rem; outline: none;
+            background: white; color: #2d3436;
+            border-radius: 20px 20px 20px 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.02);
         }
         
-        .action-btn {
-            width: 50px; height: 50px; border-radius: 50%; border: none;
-            background: #eee; color: #555; font-size: 1.2rem; cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
+        /* Dynamic Chat Colors */
+        .relationship .msg-bot { border-left: 4px solid #ff758c; }
+        .roast .msg-bot { border-left: 4px solid #cb2d3e; }
+        .msg img { width: 100%; border-radius: 12px; margin-top: 5px; }
+
+        /* --- INPUT AREA --- */
+        .input-area {
+            padding: 15px; background: white;
+            display: flex; align-items: center; gap: 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
-        .send-btn { background: #333; color: white; }
-        .relationship .send-btn { background: #ff758c; }
-        .smart .send-btn { background: #764ba2; }
+
+        .icon-btn {
+            width: 45px; height: 45px; border-radius: 50%;
+            border: none; background: #f0f2f5; color: #555;
+            font-size: 1.1rem; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.2s;
+        }
+        .icon-btn:active { transform: scale(0.9); }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid #eee;
+            background: #f0f2f5;
+            font-size: 1rem; font-family: var(--font-main);
+            outline: none; transition: 0.3s;
+        }
+        .chat-input:focus { background: white; border-color: #ccc; box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+
+        .send-btn {
+            background: #2d3436; color: white;
+        }
+        .relationship .send-btn { background: #ff758c; box-shadow: 0 4px 10px rgba(255, 117, 140, 0.3); }
+        .roast .send-btn { background: #cb2d3e; }
+
+        /* Typing Dot Animation */
+        .typing { display: none; align-self: flex-start; margin-left: 15px; margin-bottom: 10px; }
+        .dot { height: 8px; width: 8px; background-color: #bbb; border-radius: 50%; display: inline-block; animation: dot-pulse 1.5s infinite ease-in-out both; }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes dot-pulse { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
     </style>
 </head>
-<body class="relationship" id="body">
+<body class="relationship" id="bodyTheme">
 
     <div class="app-container">
         
+        <!-- ONBOARDING -->
         <div id="onboarding">
             <h1>Start Vibing</h1>
-            <div class="form-group">
-                <label>Name</label> <input type="text" id="userName" placeholder="Alex">
+            <p>Customize your AI companion</p>
+            
+            <div class="input-group">
+                <label>Your Name</label>
+                <input type="text" class="styled-input" id="userName" placeholder="e.g., Alex">
             </div>
-            <div class="form-group">
-                <label>Gender</label> 
-                <select id="userGender">
-                    <option value="male">Guy 👨</option>
-                    <option value="female">Girl 👩</option>
+            
+            <div class="input-group">
+                <label>I identify as</label>
+                <select class="styled-input" id="userGender">
+                    <option value="male">Male 👨</option>
+                    <option value="female">Female 👩</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Age</label> <input type="number" id="userAge" placeholder="21">
+
+            <div class="input-group">
+                <label>My Age</label>
+                <input type="number" class="styled-input" id="userAge" placeholder="21" min="16" max="99">
             </div>
-            <button class="btn-primary" onclick="finishSetup()">Let's Go</button>
+
+            <button class="btn-primary" onclick="finishSetup()">Let's Chat <i class="fas fa-arrow-right"></i></button>
         </div>
 
+        <!-- HEADER -->
         <div class="header">
-            <div class="avatar-wrapper" onclick="toggleMute()">
+            <div class="avatar-area" onclick="toggleMute()">
                 <div class="avatar" id="avatarIcon">❤️</div>
-                <div class="status-badge" id="voiceBadge">🔊 ON</div>
+                <div class="voice-badge" id="voiceBadge"><i class="fas fa-volume-up"></i></div>
             </div>
             <h2 class="persona-name" id="personaName">My Love</h2>
-            <p class="persona-role" id="personaRole">Devoted AI</p>
+            <p class="persona-sub" id="personaRole">Always here for you</p>
 
-            <div class="mode-scroll">
-                <button class="mode-btn" onclick="setMode('roast')">🔥 Roast</button>
-                <button class="mode-btn" onclick="setMode('friend')">😎 Friend</button>
-                <button class="mode-btn active" onclick="setMode('relationship')">❤️ Lover</button>
-                <button class="mode-btn" onclick="setMode('therapy')">🌿 Therapy</button>
-                <button class="mode-btn" onclick="setMode('smart')">✨ Smart</button>
+            <div class="mode-container">
+                <div class="mode-pill active" id="btn-relationship" onclick="setMode('relationship')">❤️ Lover</div>
+                <div class="mode-pill" id="btn-friend" onclick="setMode('friend')">😎 Bestie</div>
+                <div class="mode-pill" id="btn-roast" onclick="setMode('roast')">🔥 Roast</div>
+                <div class="mode-pill" id="btn-therapy" onclick="setMode('therapy')">🌿 Therapy</div>
+                <div class="mode-pill" id="btn-smart" onclick="setMode('smart')">✨ Smart</div>
             </div>
         </div>
 
+        <!-- CHAT -->
         <div class="chat-area" id="chatArea"></div>
-        <div class="typing" id="typingIndicator">Typing...</div>
+        
+        <!-- TYPING INDICATOR -->
+        <div class="typing" id="typingIndicator">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
 
-        <div class="input-bar">
+        <!-- INPUT -->
+        <div class="input-area">
             <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload()">
-            <button class="action-btn" onclick="document.getElementById('imageInput').click()"><i class="fas fa-camera"></i></button>
-            <input type="text" id="userInput" placeholder="Message..." onkeypress="handleEnter(event)">
-            <button class="send-btn action-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            <button class="icon-btn" onclick="document.getElementById('imageInput').click()">
+                <i class="fas fa-camera"></i>
+            </button>
+            <input type="text" class="chat-input" id="userInput" placeholder="Type a message..." onkeypress="handleEnter(event)">
+            <button class="icon-btn send-btn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
 
     </div>
 
     <script>
+        // --- LOGIC ---
         let user = { name: "User", gender: "male", age: 21 };
         let currentMode = "relationship";
         let isMuted = false;
-        let voices = [];
         let currentImageBase64 = null;
+        let voices = [];
 
         function finishSetup() {
             user.name = document.getElementById('userName').value || "User";
             user.gender = document.getElementById('userGender').value;
             user.age = document.getElementById('userAge').value;
-            document.getElementById('onboarding').style.display = 'none';
-            setMode('relationship');
+            
+            document.getElementById('onboarding').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('onboarding').style.display = 'none';
+                setMode('relationship');
+            }, 400);
         }
 
         function setMode(mode) {
             currentMode = mode;
             document.body.className = mode;
             
-            document.querySelectorAll('.mode-btn').forEach(b => {
-                b.classList.remove('active');
-                if(b.innerText.toLowerCase().includes(mode)) b.classList.add('active');
-            });
+            // Update Pills
+            document.querySelectorAll('.mode-pill').forEach(el => el.classList.remove('active'));
+            document.getElementById(`btn-${mode}`).classList.add('active');
 
+            // Update UI Text
             const nameEl = document.getElementById('personaName');
             const roleEl = document.getElementById('personaRole');
             const iconEl = document.getElementById('avatarIcon');
@@ -286,28 +387,32 @@
 
             let greeting = "";
 
-            if(mode === 'relationship' || mode === 'smart') {
-                if(mode === 'relationship') iconEl.innerText = "❤️";
-                else iconEl.innerText = "✨";
-                
-                // Gender Logic for Greeting
+            if(mode === 'relationship') {
+                iconEl.innerText = "❤️";
                 if(user.gender === 'male') {
-                    nameEl.innerText = mode === 'smart' ? "Your Assistant" : "Your Girl";
-                    roleEl.innerText = mode === 'smart' ? "Intelligent & Sweet" : "She loves you";
-                    greeting = `Hey ${user.name}, handsome! Need anything? 😘`;
+                    nameEl.innerText = "Your Girl";
+                    roleEl.innerText = "Adoring & Sweet";
+                    greeting = `Hey ${user.name}, handsome! I missed you so much. 😘`;
                 } else {
-                    nameEl.innerText = mode === 'smart' ? "Your Assistant" : "Your Man";
-                    roleEl.innerText = mode === 'smart' ? "Intelligent & Charming" : "He adores you";
-                    greeting = `Hey ${user.name}, beautiful. I'm here for you. ❤️`;
+                    nameEl.innerText = "Your Guy";
+                    roleEl.innerText = "Charming & Protective";
+                    greeting = `Hey ${user.name}, beautiful. How's my favorite girl? ❤️`;
                 }
             } else if(mode === 'roast') {
                 iconEl.innerText = "😈";
                 nameEl.innerText = "Roast Master";
-                greeting = `Oh great, it's ${user.name} again.`;
+                roleEl.innerText = "No Mercy";
+                greeting = `Oh great, look who finally showed up.`;
+            } else if(mode === 'smart') {
+                iconEl.innerText = "✨";
+                nameEl.innerText = "Gemini";
+                roleEl.innerText = "Super Intelligence";
+                greeting = `Hello ${user.name}. I am online. How can I help?`;
             } else {
                 iconEl.innerText = "😎";
                 nameEl.innerText = "Bestie";
-                greeting = `Yo ${user.name}! What's good?`;
+                roleEl.innerText = "Just Vibing";
+                greeting = `Yo ${user.name}! What's the plan today?`;
             }
 
             addMessage(greeting, 'bot');
@@ -316,15 +421,15 @@
 
         function handleImageUpload() {
             const file = document.getElementById('imageInput').files[0];
-            if (file) {
+            if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     currentImageBase64 = e.target.result;
                     const div = document.createElement('div');
                     div.className = 'msg msg-user';
-                    div.innerHTML = `<img src="${currentImageBase64}" width="150"><br><i>Sending...</i>`;
+                    div.innerHTML = `<img src="${currentImageBase64}"><br><i>Sending photo...</i>`;
                     document.getElementById('chatArea').appendChild(div);
-                    document.getElementById('userInput').value = "Look at this!";
+                    document.getElementById('userInput').value = "Check this out!";
                     sendMessage();
                 };
                 reader.readAsDataURL(file);
@@ -339,30 +444,29 @@
             if(!currentImageBase64) addMessage(text, 'user');
             input.value = '';
             
-            document.getElementById('typingIndicator').style.display = 'block';
-            document.getElementById('chatArea').scrollTop = 99999;
+            const typing = document.getElementById('typingIndicator');
+            typing.style.display = 'block';
+            const chat = document.getElementById('chatArea');
+            chat.scrollTop = chat.scrollHeight;
 
             try {
                 const res = await fetch('/predict', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        text: text,
-                        mode: currentMode,
-                        userData: user,
-                        image: currentImageBase64
+                        text: text, mode: currentMode, userData: user, image: currentImageBase64
                     })
                 });
                 const data = await res.json();
                 
-                document.getElementById('typingIndicator').style.display = 'none';
+                typing.style.display = 'none';
                 addMessage(data.response, 'bot');
                 speakText(data.response);
                 currentImageBase64 = null;
 
             } catch(e) {
-                document.getElementById('typingIndicator').style.display = 'none';
-                addMessage("Error: Offline.", 'bot');
+                typing.style.display = 'none';
+                addMessage("Error: Connection lost.", 'bot');
             }
         }
 
@@ -370,16 +474,18 @@
             const div = document.createElement('div');
             div.className = `msg msg-${sender}`;
             div.innerText = text;
-            document.getElementById('chatArea').appendChild(div);
-            document.getElementById('chatArea').scrollTop = 99999;
+            const chat = document.getElementById('chatArea');
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
         }
 
         function handleEnter(e) { if(e.key === 'Enter') sendMessage(); }
 
-        // --- VOICE LOGIC ---
         function toggleMute() {
             isMuted = !isMuted;
-            document.getElementById('voiceBadge').innerText = isMuted ? "🔇 OFF" : "🔊 ON";
+            const badge = document.getElementById('voiceBadge');
+            badge.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+            badge.style.background = isMuted ? "#e74c3c" : "#2ecc71";
             if(isMuted) window.speechSynthesis.cancel();
         }
 
@@ -390,21 +496,18 @@
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             
-            // --- GENDER SWAP LOGIC ---
-            // Applies to 'relationship' AND 'smart' modes
+            // --- GENDER VOICE LOGIC ---
             if(currentMode === 'relationship' || currentMode === 'smart') {
                 if(user.gender === 'male') {
-                    // MALE USER -> FEMALE VOICE
+                    // Male User -> Female Voice
                     const fVoice = voices.find(v => v.name.includes("Zira") || v.name.includes("Female") || v.name.includes("Google US English"));
                     if(fVoice) utterance.voice = fVoice;
-                    utterance.pitch = 1.2; 
-                    utterance.rate = 1.05;
+                    utterance.pitch = 1.2; utterance.rate = 1.05;
                 } else {
-                    // FEMALE USER -> MALE VOICE
+                    // Female User -> Male Voice
                     const mVoice = voices.find(v => v.name.includes("David") || v.name.includes("Male") || v.name.includes("Google UK English Male"));
                     if(mVoice) utterance.voice = mVoice;
-                    utterance.pitch = 0.9;
-                    utterance.rate = 0.95;
+                    utterance.pitch = 0.9; utterance.rate = 0.95;
                 }
             } else if (currentMode === 'roast') {
                 utterance.pitch = 0.6; utterance.rate = 1.2;
@@ -412,7 +515,6 @@
 
             window.speechSynthesis.speak(utterance);
         }
-        voices = window.speechSynthesis.getVoices();
     </script>
 </body>
 </html>
