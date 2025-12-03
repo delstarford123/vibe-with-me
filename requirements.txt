@@ -9,3 +9,4 @@ scikit-learn
 datasets
 kaggle
 huggingface-hub
+python-dotenv
