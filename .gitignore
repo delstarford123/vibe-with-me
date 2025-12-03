@@ -6,3 +6,7 @@ __pycache__/
 .DS_Store
 .vscode/
 temp_*.txt
+
+models/
+
+data/
