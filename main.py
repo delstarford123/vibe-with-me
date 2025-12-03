@@ -9,26 +9,13 @@ sys.path.append(src_dir)
 
 app = Flask(__name__)
 
-# --- LAZY LOADERS ---
-local_bot = None 
-
-def get_local_bot():
-    global local_bot
-    if local_bot is None:
-        try:
-            print("⏳ Loading Local Brain (Backup)...")
-            from src.predict import DualBot
-            local_bot = DualBot()
-        except:
-            return None
-    return local_bot
-
-# Check if Gemini is available
+# Try importing Gemini
 try:
-    from src.gemini_brain import generate_gemini_response
+    from gemini_brain import generate_gemini_response
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
+    print("⚠️ Gemini module not found.")
 
 @app.route('/')
 def home():
@@ -38,43 +25,27 @@ def home():
 def predict():
     data = request.json
     user_text = data.get('text', '')
-    mode = data.get('mode', 'relationship') # Default to relationship
+    mode = data.get('mode', 'relationship')
     user_data = data.get('userData', {})
     image_data = data.get('image', None)
 
     response_text = ""
 
-    # --- INTELLIGENT ROUTING ---
-    # We want Gemini to handle 'Relationship' mode because it's better at 
-    # roleplaying a girlfriend/boyfriend than the local model.
-    # We also use it for 'Smart' mode and Image analysis.
-    use_gemini = GEMINI_AVAILABLE and (
-        mode == 'relationship' or 
-        mode == 'smart' or 
-        mode == 'friend' or
-        image_data
-    )
-
-    if use_gemini:
+    # --- CLOUD-ONLY LOGIC ---
+    # We rely 100% on Gemini because it is smarter and doesn't crash the free server.
+    if GEMINI_AVAILABLE:
         print(f"✨ Routing '{mode}' to Gemini...")
         response_text = generate_gemini_response(user_text, mode, user_data, image_data)
         
-        # Fallback if Gemini fails
+        # If Gemini fails, give a helpful error message instead of crashing
         if "Error" in response_text or "failed" in response_text:
-            print("⚠️ Gemini failed. Falling back to local brain.")
-            use_gemini = False # Trigger fallback block below
-
-    # --- FALLBACK: LOCAL BRAIN ---
-    if not use_gemini:
-        bot = get_local_bot()
-        if bot:
-            # Local brain can't see images, so we ignore image_data here
-            response_text = bot.generate(user_text, mode, user_data)
-        else:
-            response_text = "System Offline. (Check logs)"
+            print(f"⚠️ Gemini API Error: {response_text}")
+            response_text = "I'm having trouble connecting to my brain. (Check Render API Key)"
+    else:
+        response_text = "System Error: Gemini Brain missing."
 
     return jsonify({'response': response_text})
 
 if __name__ == '__main__':
-    print(f"🌐 Server running at: http://127.0.0.1:5000")
+    # Local testing can still use debug mode
     app.run(debug=True, port=5000)
