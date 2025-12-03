@@ -12,7 +12,6 @@
             --roast-grad: linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%);
             --love-grad: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             --smart-grad: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-            --love-accent: #ff758c;
             --chat-bg: #f4f7f6;
             --glass-bg: rgba(255, 255, 255, 0.95);
             --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -69,8 +68,6 @@
         }
 
         #onboarding h1 { font-size: 2rem; color: #333; margin-bottom: 10px; }
-        #onboarding p { color: #666; margin-bottom: 30px; }
-
         .form-group { width: 100%; margin-bottom: 15px; text-align: left; }
         .form-group label { font-size: 0.9rem; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
         .form-group input, .form-group select {
@@ -78,17 +75,13 @@
             border: 2px solid #eee; border-radius: 12px;
             font-size: 1rem; background: #fafafa;
         }
-        .form-group input:focus { border-color: #764ba2; outline: none; }
-
         .btn-primary {
             width: 100%; padding: 15px;
             background: var(--primary-grad);
             color: white; border: none; border-radius: 12px;
             font-size: 1.1rem; font-weight: bold;
             cursor: pointer; margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
         }
-        .btn-primary:hover { transform: translateY(-2px); }
 
         /* --- HEADER --- */
         .header {
@@ -120,7 +113,6 @@
             background: #2ecc71; color: white;
             font-size: 0.7rem; padding: 4px 8px;
             border-radius: 10px; font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         /* Animations */
@@ -130,7 +122,6 @@
 
         .relationship .avatar { border-color: #ff758c; animation: heartbeat 2s infinite; }
         .roast .avatar { border-color: #ef473a; animation: angryShake 0.5s infinite paused; }
-        .roast .avatar:hover { animation-play-state: running; }
         .smart .avatar { border-color: #E0C3FC; animation: spin 10s linear infinite; }
 
         .persona-name { font-size: 1.4rem; font-weight: 800; color: #333; margin: 0; }
@@ -151,9 +142,7 @@
         }
         .mode-btn.active { background: #333; color: white; border-color: #333; transform: scale(1.05); }
         
-        /* Specific Active Colors */
-        .relationship .mode-btn.active { background: var(--love-accent); border-color: var(--love-accent); }
-        .roast .mode-btn.active { background: #cb2d3e; border-color: #cb2d3e; }
+        .relationship .mode-btn.active { background: #ff758c; border-color: #ff758c; }
         .smart .mode-btn.active { background: #764ba2; border-color: #764ba2; }
 
         /* --- CHAT AREA --- */
@@ -183,18 +172,11 @@
             border-bottom-left-radius: 4px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .msg img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-top: 5px;
-        }
+        .msg img { max-width: 100%; border-radius: 10px; margin-top: 5px; }
 
-        /* Typing Indicator */
         .typing {
-            align-self: flex-start;
-            background: transparent; color: #aaa;
-            font-size: 0.8rem; font-style: italic;
-            margin-left: 10px; display: none;
+            align-self: flex-start; color: #aaa; font-size: 0.8rem; 
+            margin-left: 10px; display: none; font-style: italic;
         }
 
         /* --- INPUT AREA --- */
@@ -209,19 +191,14 @@
             border-radius: 30px; border: 2px solid #f0f0f0;
             font-size: 1rem; outline: none;
         }
-        .input-bar input:focus { border-color: #ddd; }
-
+        
         .action-btn {
-            width: 50px; height: 50px;
-            border-radius: 50%; border: none;
-            background: #eee; color: #555;
-            font-size: 1.2rem; cursor: pointer;
+            width: 50px; height: 50px; border-radius: 50%; border: none;
+            background: #eee; color: #555; font-size: 1.2rem; cursor: pointer;
             display: flex; justify-content: center; align-items: center;
         }
         .send-btn { background: #333; color: white; }
-        
-        .relationship .send-btn { background: var(--love-accent); }
-        .roast .send-btn { background: #cb2d3e; }
+        .relationship .send-btn { background: #ff758c; }
         .smart .send-btn { background: #764ba2; }
 
     </style>
@@ -230,40 +207,31 @@
 
     <div class="app-container">
         
-        <!-- ONBOARDING MODAL -->
         <div id="onboarding">
-            <h1>Let's Get Started</h1>
-            <p>Tell me about yourself so I can vibe correctly.</p>
-            
+            <h1>Start Vibing</h1>
             <div class="form-group">
-                <label>Your Name</label>
-                <input type="text" id="userName" placeholder="e.g. Alex">
+                <label>Name</label> <input type="text" id="userName" placeholder="Alex">
             </div>
-            
             <div class="form-group">
-                <label>I am a...</label>
+                <label>Gender</label> 
                 <select id="userGender">
                     <option value="male">Guy 👨</option>
                     <option value="female">Girl 👩</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <label>My Age</label>
-                <input type="number" id="userAge" placeholder="21" min="16" max="99">
+                <label>Age</label> <input type="number" id="userAge" placeholder="21">
             </div>
-
-            <button class="btn-primary" onclick="finishSetup()">Enter App</button>
+            <button class="btn-primary" onclick="finishSetup()">Let's Go</button>
         </div>
 
-        <!-- MAIN HEADER -->
         <div class="header">
             <div class="avatar-wrapper" onclick="toggleMute()">
                 <div class="avatar" id="avatarIcon">❤️</div>
                 <div class="status-badge" id="voiceBadge">🔊 ON</div>
             </div>
             <h2 class="persona-name" id="personaName">My Love</h2>
-            <p class="persona-role" id="personaRole">Your Devoted AI</p>
+            <p class="persona-role" id="personaRole">Devoted AI</p>
 
             <div class="mode-scroll">
                 <button class="mode-btn" onclick="setMode('roast')">🔥 Roast</button>
@@ -274,147 +242,105 @@
             </div>
         </div>
 
-        <!-- CHAT HISTORY -->
-        <div class="chat-area" id="chatArea">
-            <!-- Messages inject here -->
-        </div>
-        <div class="typing" id="typingIndicator">Thinking...</div>
+        <div class="chat-area" id="chatArea"></div>
+        <div class="typing" id="typingIndicator">Typing...</div>
 
-        <!-- INPUT -->
         <div class="input-bar">
-            <!-- Image Upload Trigger -->
             <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload()">
-            <button class="action-btn" onclick="document.getElementById('imageInput').click()">
-                <i class="fas fa-camera"></i>
-            </button>
-
-            <input type="text" id="userInput" placeholder="Type a message..." onkeypress="handleEnter(event)">
+            <button class="action-btn" onclick="document.getElementById('imageInput').click()"><i class="fas fa-camera"></i></button>
+            <input type="text" id="userInput" placeholder="Message..." onkeypress="handleEnter(event)">
             <button class="send-btn action-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
         </div>
 
     </div>
 
     <script>
-        // State
         let user = { name: "User", gender: "male", age: 21 };
         let currentMode = "relationship";
         let isMuted = false;
         let voices = [];
         let currentImageBase64 = null;
 
-        // --- SETUP & ONBOARDING ---
         function finishSetup() {
-            const name = document.getElementById('userName').value;
-            const age = document.getElementById('userAge').value;
-            
-            if(!name || !age) {
-                alert("Please fill in your details!");
-                return;
-            }
-
-            user.name = name;
-            user.age = parseInt(age);
+            user.name = document.getElementById('userName').value || "User";
             user.gender = document.getElementById('userGender').value;
-
-            document.getElementById('onboarding').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('onboarding').style.display = 'none';
-                setMode('relationship'); // Start with Love
-            }, 300);
+            user.age = document.getElementById('userAge').value;
+            document.getElementById('onboarding').style.display = 'none';
+            setMode('relationship');
         }
 
-        // --- MODES & PERSONA ---
         function setMode(mode) {
             currentMode = mode;
             document.body.className = mode;
             
-            // Update Buttons
             document.querySelectorAll('.mode-btn').forEach(b => {
                 b.classList.remove('active');
                 if(b.innerText.toLowerCase().includes(mode)) b.classList.add('active');
             });
 
-            // Update Persona Text & Avatar
             const nameEl = document.getElementById('personaName');
             const roleEl = document.getElementById('personaRole');
             const iconEl = document.getElementById('avatarIcon');
             const chat = document.getElementById('chatArea');
-            chat.innerHTML = ''; // Clear Chat
+            chat.innerHTML = '';
 
             let greeting = "";
 
-            if(mode === 'relationship') {
-                iconEl.innerText = "❤️";
+            if(mode === 'relationship' || mode === 'smart') {
+                if(mode === 'relationship') iconEl.innerText = "❤️";
+                else iconEl.innerText = "✨";
+                
+                // Gender Logic for Greeting
                 if(user.gender === 'male') {
-                    nameEl.innerText = "Your Girl";
-                    roleEl.innerText = "She adores you";
-                    greeting = `Hey ${user.name}, handsome! I missed you. 😘`;
+                    nameEl.innerText = mode === 'smart' ? "Your Assistant" : "Your Girl";
+                    roleEl.innerText = mode === 'smart' ? "Intelligent & Sweet" : "She loves you";
+                    greeting = `Hey ${user.name}, handsome! Need anything? 😘`;
                 } else {
-                    nameEl.innerText = "Your Man";
-                    roleEl.innerText = "He's crazy about you";
-                    greeting = `Hey ${user.name}, beautiful. How's my girl doing? ❤️`;
+                    nameEl.innerText = mode === 'smart' ? "Your Assistant" : "Your Man";
+                    roleEl.innerText = mode === 'smart' ? "Intelligent & Charming" : "He adores you";
+                    greeting = `Hey ${user.name}, beautiful. I'm here for you. ❤️`;
                 }
             } else if(mode === 'roast') {
                 iconEl.innerText = "😈";
                 nameEl.innerText = "Roast Master";
-                roleEl.innerText = "Emotional Damage Incoming";
-                greeting = `Oh look, it's ${user.name}. Ready to cry?`;
-            } else if(mode === 'smart') {
-                iconEl.innerText = "✨";
-                nameEl.innerText = "Gemini Mind";
-                roleEl.innerText = "Super Intelligence";
-                greeting = `Hello ${user.name}. I am online and ready to help.`;
-            } else if(mode === 'friend') {
+                greeting = `Oh great, it's ${user.name} again.`;
+            } else {
                 iconEl.innerText = "😎";
                 nameEl.innerText = "Bestie";
-                roleEl.innerText = "Always vibing";
-                greeting = `Yo ${user.name}! What's the latest tea?`;
-            } else {
-                iconEl.innerText = "🌿";
-                nameEl.innerText = "Dr. AI";
-                roleEl.innerText = "Wellness Companion";
-                greeting = `Hello ${user.name}. This is a safe space.`;
+                greeting = `Yo ${user.name}! What's good?`;
             }
 
             addMessage(greeting, 'bot');
             speakText(greeting);
         }
 
-        // --- IMAGE HANDLING ---
         function handleImageUpload() {
             const file = document.getElementById('imageInput').files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    currentImageBase64 = e.target.result; // Data URL
-                    // Show preview in chat
+                    currentImageBase64 = e.target.result;
                     const div = document.createElement('div');
                     div.className = 'msg msg-user';
-                    div.innerHTML = `<img src="${currentImageBase64}" width="150"><br><i>Sending photo...</i>`;
+                    div.innerHTML = `<img src="${currentImageBase64}" width="150"><br><i>Sending...</i>`;
                     document.getElementById('chatArea').appendChild(div);
-                    // Automatically send text with it
-                    document.getElementById('userInput').value = "Check this out!";
+                    document.getElementById('userInput').value = "Look at this!";
                     sendMessage();
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        // --- MESSAGING ---
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const text = input.value.trim();
             if(!text && !currentImageBase64) return;
 
             if(!currentImageBase64) addMessage(text, 'user');
-            
             input.value = '';
             
-            // Show Typing
-            const typing = document.getElementById('typingIndicator');
-            typing.style.display = 'block';
-            const chat = document.getElementById('chatArea');
-            chat.scrollTop = chat.scrollHeight;
+            document.getElementById('typingIndicator').style.display = 'block';
+            document.getElementById('chatArea').scrollTop = 99999;
 
             try {
                 const res = await fetch('/predict', {
@@ -424,22 +350,19 @@
                         text: text,
                         mode: currentMode,
                         userData: user,
-                        image: currentImageBase64 // Send image if exists
+                        image: currentImageBase64
                     })
                 });
                 const data = await res.json();
                 
-                typing.style.display = 'none';
+                document.getElementById('typingIndicator').style.display = 'none';
                 addMessage(data.response, 'bot');
                 speakText(data.response);
-                
-                // Clear image after sending
-                currentImageBase64 = null; 
-                document.getElementById('imageInput').value = '';
+                currentImageBase64 = null;
 
             } catch(e) {
-                typing.style.display = 'none';
-                addMessage("Error: My brain is offline.", 'bot');
+                document.getElementById('typingIndicator').style.display = 'none';
+                addMessage("Error: Offline.", 'bot');
             }
         }
 
@@ -453,58 +376,43 @@
 
         function handleEnter(e) { if(e.key === 'Enter') sendMessage(); }
 
-        // --- ADVANCED VOICE LOGIC ---
+        // --- VOICE LOGIC ---
         function toggleMute() {
             isMuted = !isMuted;
-            const badge = document.getElementById('voiceBadge');
-            badge.innerText = isMuted ? "🔇 OFF" : "🔊 ON";
-            badge.style.background = isMuted ? "#999" : "#2ecc71";
+            document.getElementById('voiceBadge').innerText = isMuted ? "🔇 OFF" : "🔊 ON";
             if(isMuted) window.speechSynthesis.cancel();
         }
 
-        // Load voices when available
-        window.speechSynthesis.onvoiceschanged = () => {
-            voices = window.speechSynthesis.getVoices();
-        };
+        window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
 
         function speakText(text) {
             if(isMuted) return;
             window.speechSynthesis.cancel();
-
             const utterance = new SpeechSynthesisUtterance(text);
             
-            // LOGIC: Pick the right gender voice based on User's Gender
-            // If User is MALE -> Bot needs FEMALE voice
-            // If User is FEMALE -> Bot needs MALE voice
-            
-            let preferredVoice = null;
-
-            if(currentMode === 'relationship') {
+            // --- GENDER SWAP LOGIC ---
+            // Applies to 'relationship' AND 'smart' modes
+            if(currentMode === 'relationship' || currentMode === 'smart') {
                 if(user.gender === 'male') {
-                    // Find a Female Voice (Zira, Google US English, Samantha)
-                    preferredVoice = voices.find(v => v.name.includes("Zira") || v.name.includes("Female") || v.name.includes("Google US English"));
-                    utterance.pitch = 1.2; // Slightly higher/softer
+                    // MALE USER -> FEMALE VOICE
+                    const fVoice = voices.find(v => v.name.includes("Zira") || v.name.includes("Female") || v.name.includes("Google US English"));
+                    if(fVoice) utterance.voice = fVoice;
+                    utterance.pitch = 1.2; 
                     utterance.rate = 1.05;
                 } else {
-                    // Find a Male Voice (David, Google UK English Male, Daniel)
-                    preferredVoice = voices.find(v => v.name.includes("David") || v.name.includes("Male") || v.name.includes("Google UK English Male"));
-                    utterance.pitch = 0.8; // Deeper
+                    // FEMALE USER -> MALE VOICE
+                    const mVoice = voices.find(v => v.name.includes("David") || v.name.includes("Male") || v.name.includes("Google UK English Male"));
+                    if(mVoice) utterance.voice = mVoice;
+                    utterance.pitch = 0.9;
                     utterance.rate = 0.95;
                 }
             } else if (currentMode === 'roast') {
-                utterance.pitch = 0.5; // Scary/Deep
-                utterance.rate = 1.2; // Fast
-            } else {
-                utterance.pitch = 1.0;
+                utterance.pitch = 0.6; utterance.rate = 1.2;
             }
 
-            if(preferredVoice) utterance.voice = preferredVoice;
             window.speechSynthesis.speak(utterance);
         }
-
-        // Initialize voices immediately just in case
         voices = window.speechSynthesis.getVoices();
-
     </script>
 </body>
 </html>

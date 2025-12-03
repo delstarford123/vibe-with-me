@@ -2,35 +2,33 @@ import sys
 import os
 from flask import Flask, render_template, request, jsonify
 
-# --- PATH SETUP ---
-# Ensure Python looks inside the 'src' folder for imports
+# Path setup
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = os.path.join(current_dir, 'src')
 sys.path.append(src_dir)
 
 app = Flask(__name__)
- 
-# --- LAZY LOADING SETUP ---
-# We start with bot = None so the server starts INSTANTLY.
-# The AI only loads when the first person sends a message.
-bot = None 
 
-def get_bot():
-    """"
-    Lazy Loader: Loads the heavy AI model only when needed.
-    This prevents Render from timing out during the 30-second startup limit.
-    """
-    global bot
-    if bot is None:
-        print("⏳ First request received. Loading AI Engine... (This may take a moment)")
+# --- LAZY LOADERS ---
+local_bot = None 
+
+def get_local_bot():
+    global local_bot
+    if local_bot is None:
         try:
-            from predict import DualBot
-            bot = DualBot()
-            print("✅ AI Engine Loaded successfully.")
-        except Exception as e:
-            print(f"❌ Failed to load AI: {e}")
+            print("⏳ Loading Local Brain (Backup)...")
+            from src.predict import DualBot
+            local_bot = DualBot()
+        except:
             return None
-    return bot
+    return local_bot
+
+# Check if Gemini is available
+try:
+    from src.gemini_brain import generate_gemini_response
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
 
 @app.route('/')
 def home():
@@ -39,40 +37,44 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
-    
-    # Extract User Data
     user_text = data.get('text', '')
-    mode = data.get('mode', 'roast')
-    user_data = data.get('userData', {}) # Example: {name: "John", gender: "male", age: 22}
-    
-    # Load the bot NOW (on the first request)
-    ai_bot = get_bot()
-    
+    mode = data.get('mode', 'relationship') # Default to relationship
+    user_data = data.get('userData', {})
+    image_data = data.get('image', None)
+
     response_text = ""
 
-    if ai_bot:
-        try:
-            # Pass user_data to the generator so it knows if it's a BF or GF
-            response_text = ai_bot.generate(user_text, mode, user_data)
-        except Exception as e:
-            print(f"Generation Error: {e}")
-            response_text = "I'm having a brain freeze. Ask me again in a second!"
-    else:
-        # Fallback / Mock Responses (If model crashes or files are missing)
-        name = user_data.get('name', 'babe')
+    # --- INTELLIGENT ROUTING ---
+    # We want Gemini to handle 'Relationship' mode because it's better at 
+    # roleplaying a girlfriend/boyfriend than the local model.
+    # We also use it for 'Smart' mode and Image analysis.
+    use_gemini = GEMINI_AVAILABLE and (
+        mode == 'relationship' or 
+        mode == 'smart' or 
+        mode == 'friend' or
+        image_data
+    )
+
+    if use_gemini:
+        print(f"✨ Routing '{mode}' to Gemini...")
+        response_text = generate_gemini_response(user_text, mode, user_data, image_data)
         
-        if mode == 'relationship':
-            response_text = f"I love you so much {name}! (Model Offline - Mock Response)"
-        elif mode == 'roast':
-            response_text = f"Nice try {name}, but I'm not in the mood. (Model Offline)"
-        elif mode == 'friend':
-            response_text = f"Yo {name}, what's up? (Model Offline)"
+        # Fallback if Gemini fails
+        if "Error" in response_text or "failed" in response_text:
+            print("⚠️ Gemini failed. Falling back to local brain.")
+            use_gemini = False # Trigger fallback block below
+
+    # --- FALLBACK: LOCAL BRAIN ---
+    if not use_gemini:
+        bot = get_local_bot()
+        if bot:
+            # Local brain can't see images, so we ignore image_data here
+            response_text = bot.generate(user_text, mode, user_data)
         else:
-            response_text = f"I'm listening, {name}. (Model Offline)"
+            response_text = "System Offline. (Check logs)"
 
     return jsonify({'response': response_text})
 
 if __name__ == '__main__':
     print(f"🌐 Server running at: http://127.0.0.1:5000")
-    # For local testing only
     app.run(debug=True, port=5000)
