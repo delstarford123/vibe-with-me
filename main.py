@@ -39,10 +39,10 @@ def predict():
         
         # If Gemini fails, give a helpful error message instead of crashing
         if "Error" in response_text or "failed" in response_text:
-            print(f"⚠️ Gemini API Error: {response_text}")
+            print(f"⚠️ My API Error: {response_text}")
             response_text = "I'm having trouble connecting to my brain. (Check Render API Key)"
     else:
-        response_text = "System Error: Gemini Brain missing."
+        response_text = "System Error: My Brain missing."
 
     return jsonify({'response': response_text})
 
