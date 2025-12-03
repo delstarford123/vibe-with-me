@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 # Try importing Gemini
 try:
-    from gemini_brain import generate_gemini_response
+    from src.gemini_brain import generate_gemini_response
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
